@@ -1,0 +1,325 @@
+{
+  "milestone": "Sprint 1",
+  "milestone_due": "2026-10-04T23:59:00Z",
+  "features": [
+    {
+      "key": "F1",
+      "title": "F1: Pantry Board",
+      "labels": [
+        "feature"
+      ],
+      "body": "The main view. Shows what is in the pantry, what state each item is in, and separates current from expired.\n\n**In scope:** two views (current, expired), item cards, status shown by color AND label, phone-width layout.\n**Out of scope:** drag interaction (F2), photos.\n\n**Constraint:** status must never be conveyed by color alone. Accessibility is a Definition of Done item, not a feature.",
+      "stories": [
+        {
+          "title": "Pantry Board: See my current pantry",
+          "sprint": 1,
+          "body": "**Pantry Board:** As a home cook, I want to see everything currently in my pantry on one board, so that I know what I have without opening a cabinet.\n\n### Acceptance criteria\n- [ ] Each item shows name, quantity, storage location, and expiration date\n- [ ] Board renders usably at phone width\n- [ ] Empty pantry shows a first-run message pointing at the catalog\n- [ ] Expired items do not appear in this view",
+          "tasks": [
+            {
+              "title": "Task: Base template and navigation shell",
+              "body": "- [ ] Page renders with a header and a content region\n- [ ] Navigation between Current and Expired views\n- [ ] Layout holds at 375px wide"
+            },
+            {
+              "title": "Task: Pantry board view and URL",
+              "body": "- [ ] View queries current (non-expired) items\n- [ ] URL routed and named\n- [ ] Renders with zero items without erroring"
+            },
+            {
+              "title": "Task: Item card partial",
+              "body": "- [ ] Shows name, quantity with unit, location, expiration date\n- [ ] Long names wrap instead of breaking the layout\n- [ ] Reused by both the current and expired views"
+            },
+            {
+              "title": "Task: Empty state",
+              "body": "- [ ] Message when the pantry has no items\n- [ ] Links directly to the catalog"
+            },
+            {
+              "title": "Task: Tests for the pantry board view",
+              "body": "- [ ] Seeded items appear\n- [ ] Expired items are excluded\n- [ ] Empty pantry renders the empty state"
+            }
+          ]
+        },
+        {
+          "title": "Pantry Board: See status at a glance",
+          "sprint": 1,
+          "body": "**Pantry Board:** As a home cook, I want each item to show its freshness status visually, so that I can spot what needs using without reading every date.\n\n### Acceptance criteria\n- [ ] Fresh, expiring soon, and expired each have a distinct treatment\n- [ ] Status is carried by a text label or icon as well as color\n- [ ] The expiring-soon threshold is defined in one place, not in the template",
+          "tasks": [
+            {
+              "title": "Task: Item status classifier",
+              "body": "Single function or model property returning fresh / expiring_soon / expired.\n\n- [ ] Threshold defined once as a setting, not hardcoded\n- [ ] Boundary behavior explicit: what counts as the last fresh day, what counts as today\n- [ ] Used by every view that needs status"
+            },
+            {
+              "title": "Task: Status styling on the item card",
+              "body": "- [ ] Three visual states, distinguishable in grayscale\n- [ ] Each carries a text label, not color alone"
+            },
+            {
+              "title": "Task: Tests for status boundaries",
+              "body": "- [ ] Four days out is fresh\n- [ ] Three days out is expiring soon\n- [ ] Today and earlier is expired\n- [ ] Item with no expiration date does not crash the classifier"
+            }
+          ]
+        },
+        {
+          "title": "Pantry Board: See what has expired",
+          "sprint": 1,
+          "body": "**Pantry Board:** As a home cook, I want expired food in its own view, so that I don't plan a meal around something I need to throw out.\n\n### Acceptance criteria\n- [ ] Separate view listing only expired items\n- [ ] Reachable from the current pantry view and back\n- [ ] Count of expired items is visible from the current view",
+          "tasks": [
+            {
+              "title": "Task: Expired view and URL",
+              "body": "- [ ] Queries only items past their expiration date\n- [ ] Reuses the item card partial\n- [ ] Empty state when nothing has expired"
+            },
+            {
+              "title": "Task: Expired count indicator",
+              "body": "- [ ] Current view shows how many items have expired\n- [ ] Indicator links to the expired view"
+            },
+            {
+              "title": "Task: Tests for the expired view",
+              "body": "- [ ] Only expired items appear\n- [ ] Count matches the number shown"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "F2",
+      "title": "F2: Add Items From Catalog",
+      "labels": [
+        "feature"
+      ],
+      "body": "Adding groceries must not be tedious. The user picks from a catalog of common supermarket items instead of typing every field.\n\n**In scope:** seeded item catalog, search, click to add, quantity and date defaults.\n**Out of scope for Sprint 1:** drag-and-drop, barcode scanning, photos.\n\n**Decision:** click-to-add is the primary interaction. HTML5 drag-and-drop does not work on touch without a library and is not keyboard accessible, which conflicts with the phone-access requirement. Drag is an enhancement layered on later, not the only way in.",
+      "stories": [
+        {
+          "title": "Add Items: Browse a catalog of common groceries",
+          "sprint": 1,
+          "body": "**Add Items:** As a home cook, I want a ready-made list of common grocery items, so that I don't have to type out everything I bought.\n\n### Acceptance criteria\n- [ ] Catalog is seeded with common supermarket items across major categories\n- [ ] Each catalog entry carries a name, category, default unit, and default shelf life\n- [ ] Catalog can be extended by loading more seed data without a code change",
+          "tasks": [
+            {
+              "title": "Task: CatalogItem model and migration",
+              "body": "- [ ] Fields: name, category, default_unit, shelf_life_days by storage location\n- [ ] Field names match the agreed model contract\n- [ ] Migration runs forward and back"
+            },
+            {
+              "title": "Task: Seed the catalog with common groceries",
+              "body": "- [ ] Fixture or data migration with a solid starter set across produce, dairy, meat, pantry staples, frozen\n- [ ] Shelf-life values sourced from a published food-safety reference, and the source noted\n- [ ] Loading the seed twice does not create duplicates"
+            },
+            {
+              "title": "Task: Catalog list view",
+              "body": "- [ ] Catalog renders grouped by category\n- [ ] Usable at phone width\n- [ ] Toggleable from the pantry board rather than always on screen"
+            },
+            {
+              "title": "Task: Tests for catalog seeding and listing",
+              "body": "- [ ] Seed loads the expected number of entries\n- [ ] Catalog view returns entries grouped by category"
+            }
+          ]
+        },
+        {
+          "title": "Add Items: Search the catalog",
+          "sprint": 1,
+          "body": "**Add Items:** As a home cook, I want to search the catalog, so that I can find an item faster than scrolling a long list.\n\n### Acceptance criteria\n- [ ] Search matches on partial item name, case-insensitive\n- [ ] Matching items are shown at the top of the list\n- [ ] No match shows a clear message rather than an empty screen",
+          "tasks": [
+            {
+              "title": "Task: Catalog search query",
+              "body": "- [ ] Case-insensitive partial name match\n- [ ] Results ordered with matches first\n- [ ] Blank search returns the full catalog, not nothing"
+            },
+            {
+              "title": "Task: Search input on the catalog view",
+              "body": "- [ ] Input filters the catalog list\n- [ ] Clearing the input restores the full list\n- [ ] Works without JavaScript enabled, even if less smoothly"
+            },
+            {
+              "title": "Task: Tests for catalog search",
+              "body": "- [ ] Partial match returns the expected entries\n- [ ] Case differences still match\n- [ ] No-match path returns an empty result cleanly"
+            }
+          ]
+        },
+        {
+          "title": "Add Items: Add a catalog item to my pantry",
+          "sprint": 1,
+          "body": "**Add Items:** As a home cook, I want to click a catalog item to put it in my pantry, so that stocking groceries takes seconds.\n\n### Acceptance criteria\n- [ ] One action moves a catalog item into the pantry\n- [ ] Expiration date is prefilled from the catalog shelf life and today's date\n- [ ] Quantity defaults to 1 and the default unit comes from the catalog\n- [ ] The new item appears on the pantry board immediately\n\n### Notes\nThis is the walking skeleton. Catalog, database, board, and status classifier all get touched.",
+          "tasks": [
+            {
+              "title": "Task: PantryItem model and migration",
+              "body": "- [ ] Fields: catalog_item reference, custom name, quantity, unit, storage_location, added_on, expiration_date, removed_on, removal_reason\n- [ ] Field names match the agreed model contract\n- [ ] Migration runs forward and back"
+            },
+            {
+              "title": "Task: Shelf-life date calculation",
+              "body": "- [ ] Expiration date derived from today plus the catalog shelf life for the chosen storage location\n- [ ] Falls back sensibly when the catalog has no shelf life for that location\n- [ ] Calculation lives in one place, reusable by later features"
+            },
+            {
+              "title": "Task: Add-to-pantry view and route",
+              "body": "- [ ] Accepts a catalog item and creates a pantry item\n- [ ] Rejects an unknown catalog id\n- [ ] Redirects back to the board with the new item visible"
+            },
+            {
+              "title": "Task: Add control on the catalog list",
+              "body": "- [ ] Each catalog row has a clear add action\n- [ ] Action is reachable by keyboard and by touch\n- [ ] Feedback confirms the item was added"
+            },
+            {
+              "title": "Task: Tests for the add path",
+              "body": "- [ ] Adding a catalog item creates a pantry row with a calculated expiration date\n- [ ] Unknown catalog id creates nothing\n- [ ] Added item appears on the board"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "F3",
+      "title": "F3: Remove Items",
+      "labels": [
+        "feature"
+      ],
+      "body": "Items leave the pantry because they were eaten or because they went bad. Recording which is what makes waste reduction measurable.\n\n**Decision:** removal is a soft delete with a reason (used or wasted), not a hard delete. Reducing waste is the stated point of the product, and a deleted row can never be counted. One extra column now, impossible to backfill later.\n\n**Decision:** no confirmation dialog. Undo after the fact is less annoying and better understood than an are-you-sure prompt.",
+      "stories": [
+        {
+          "title": "Remove Items: Throw out or use up an item",
+          "sprint": 1,
+          "body": "**Remove Items:** As a home cook, I want to move an item to the trash when it's gone, so that my pantry stays true to what's actually there.\n\n### Acceptance criteria\n- [ ] One action removes an item from the board\n- [ ] The action records whether it was used or wasted\n- [ ] Removed items disappear from current and expired views\n- [ ] The row is retained in the database, not deleted",
+          "tasks": [
+            {
+              "title": "Task: Soft-delete removal on PantryItem",
+              "body": "- [ ] Sets removed_on and removal_reason\n- [ ] Default queryset excludes removed items\n- [ ] Row is never hard-deleted"
+            },
+            {
+              "title": "Task: Remove controls on the item card",
+              "body": "- [ ] Separate actions for used up and thrown out\n- [ ] Reachable by keyboard and touch\n- [ ] Board updates after the action"
+            },
+            {
+              "title": "Task: Tests for removal",
+              "body": "- [ ] Removal sets the reason and hides the item from the board\n- [ ] The underlying row still exists\n- [ ] Removing an already-removed item does not error"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "F4",
+      "title": "F4: Edit Items",
+      "labels": [
+        "feature"
+      ],
+      "body": "The pantry record drifts from reality unless the user can correct it. Quantity gets used down, dates get guessed wrong, things move from counter to fridge.",
+      "stories": [
+        {
+          "title": "Edit Items: Correct an item's details",
+          "sprint": 1,
+          "body": "**Edit Items:** As a home cook, I want to change an item's quantity, date, or location, so that a wrong guess doesn't make my whole pantry wrong.\n\n### Acceptance criteria\n- [ ] Quantity, unit, storage location, and expiration date can all be changed\n- [ ] Changing storage location offers to recalculate the expiration date\n- [ ] Cancel leaves the item untouched",
+          "tasks": [
+            {
+              "title": "Task: Edit form for a pantry item",
+              "body": "- [ ] Prefilled with current values\n- [ ] Validates date format and non-negative quantity\n- [ ] Cancel returns to the board unchanged"
+            },
+            {
+              "title": "Task: Edit view and route",
+              "body": "- [ ] Updates only submitted fields\n- [ ] Returns 404 for an unknown or removed item\n- [ ] Redirects to the board on success"
+            },
+            {
+              "title": "Task: Tests for editing",
+              "body": "- [ ] Valid edit persists\n- [ ] Invalid edit changes nothing and reports the error\n- [ ] Editing a removed item is rejected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "F5",
+      "title": "F5: AI Chef",
+      "labels": [
+        "feature"
+      ],
+      "body": "Turns an inventory into a decision about dinner. The Sprint 2 headline and the thing that makes this more than a list app.\n\n**In scope:** recipe suggestions from current pantry contents, surfaced through a chef control on the board.\n**Explicitly out of scope:** diet and nutrition recommendations. Different data, different product, and health advice from a language model is a liability we don't want in a demo.\n\n**Risk:** API key handling, per-call cost, latency. Spike in Sprint 1.",
+      "stories": [
+        {
+          "title": "AI Chef: Decide how recipes get generated",
+          "sprint": 1,
+          "body": "**AI Chef:** As a team, we want a recorded decision on how recipe suggestions are produced, so that Sprint 2 starts building instead of debating.\n\n### Acceptance criteria\n- [ ] Hosted LLM API, recipe database API, and hybrid each assessed\n- [ ] Per-call cost, latency, and key handling documented for the chosen option\n- [ ] Decision and reasoning recorded in this issue and linked from the README",
+          "tasks": [
+            {
+              "title": "Task: Compare recipe generation options",
+              "body": "- [ ] Three options assessed against cost, latency, and quality\n- [ ] One recommended with reasons\n- [ ] Written up in the issue"
+            },
+            {
+              "title": "Task: Document API key handling",
+              "body": "- [ ] Where the key lives locally, in the devcontainer, and in CI\n- [ ] Confirmed the key cannot reach the client or the repo\n- [ ] Steps a teammate can follow without asking"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "F6",
+      "title": "F6: Delivery Pipeline",
+      "labels": [
+        "feature"
+      ],
+      "body": "How work gets from a branch to the shared product without breaking it. Enabling work, not a vertical slice, and that is fine. Covers the Definition of Done items nobody else owns: integration, automated verification, review, defect tracking, decisions recorded.\n\n**Note:** the Django project lives in `project/`, not the repo root. Every CI step and every README command needs that working directory or it will not find manage.py.",
+      "stories": [
+        {
+          "title": "Delivery Pipeline: Verify the devcontainer and starter",
+          "sprint": 1,
+          "body": "**Delivery Pipeline:** As a developer, I want the devcontainer to build and the app to run from documented steps, so that nobody loses a day to setup.\n\n### Acceptance criteria\n- [ ] Devcontainer builds from a clean clone\n- [ ] Migrations run and the dev server serves a page\n- [ ] pytest runs and passes\n- [ ] Steps are in the README and reproduced by a second teammate",
+          "tasks": [
+            {
+              "title": "Task: Build the devcontainer from a clean clone",
+              "body": "- [ ] Container builds with no manual fixes\n- [ ] Dependencies from requirements.txt install\n- [ ] Migrations run and the server starts"
+            },
+            {
+              "title": "Task: Confirm pytest configuration works",
+              "body": "- [ ] pytest discovers and runs tests\n- [ ] Django settings module resolves correctly\n- [ ] A deliberately failing test actually fails the run"
+            },
+            {
+              "title": "Task: Write setup steps in the README",
+              "body": "- [ ] Exact commands in order, copy-pasteable\n- [ ] Notes that commands run from project/\n- [ ] Environment variables listed"
+            },
+            {
+              "title": "Task: Second teammate reproduces setup",
+              "body": "- [ ] Another member follows the README from scratch\n- [ ] Anything that tripped them up is fixed in the README"
+            }
+          ]
+        },
+        {
+          "title": "Delivery Pipeline: Run tests on every pull request",
+          "sprint": 1,
+          "body": "**Delivery Pipeline:** As a developer, I want tests to run automatically on every pull request, so that broken code can't reach main.\n\n### Acceptance criteria\n- [ ] Workflow installs, migrates, and runs pytest on PRs to main\n- [ ] Workflow runs from the project directory\n- [ ] A deliberately failing test blocks the merge\n- [ ] Only changes under project/ trigger the run",
+          "tasks": [
+            {
+              "title": "Task: CI workflow for install, migrate, pytest",
+              "body": "- [ ] Triggers on pull requests to main\n- [ ] working-directory set to project/\n- [ ] Path filter so lab commits elsewhere in the repo do not trigger it\n- [ ] Finishes in under five minutes"
+            },
+            {
+              "title": "Task: Require the CI check before merge",
+              "body": "- [ ] Branch protection on main requires the check\n- [ ] Direct pushes to main blocked"
+            },
+            {
+              "title": "Task: Prove a failing test blocks the merge",
+              "body": "- [ ] Throwaway PR with a failing test is blocked\n- [ ] Evidence linked on the story issue"
+            }
+          ]
+        },
+        {
+          "title": "Delivery Pipeline: Agree a Definition of Done",
+          "sprint": 1,
+          "body": "**Delivery Pipeline:** As a team, we want an agreed Definition of Done, so that done means the same thing to all five of us.\n\n### Acceptance criteria\n- [ ] Draft posted as a pinned issue\n- [ ] Every member has acknowledged it\n- [ ] Checklist reflected in the story issue template\n- [ ] Includes: works at phone width, and status is never conveyed by color alone",
+          "tasks": [
+            {
+              "title": "Task: Draft and pin the DoD issue",
+              "body": "- [ ] Covers criteria met, integrated, tests pass in CI, reviewed, no blocking defects, decisions recorded\n- [ ] Includes the accessibility line\n- [ ] Pinned in the repo"
+            },
+            {
+              "title": "Task: Collect team acknowledgement",
+              "body": "- [ ] All five members have responded\n- [ ] Requested changes folded in"
+            }
+          ]
+        },
+        {
+          "title": "Delivery Pipeline: Story and bug issue templates",
+          "sprint": 1,
+          "body": "**Delivery Pipeline:** As a team, we want story and bug templates with a criteria checklist, so that work starts with criteria instead of guesses.\n\n### Acceptance criteria\n- [ ] Story template prompts for the feature name and the As a / I want / so that line\n- [ ] Bug template prompts for steps, expected, actual, severity\n- [ ] New issues open prefilled",
+          "tasks": [
+            {
+              "title": "Task: Story issue template",
+              "body": "- [ ] Prompts for feature name and the story sentence\n- [ ] Acceptance criteria checklist\n- [ ] DoD checklist included"
+            },
+            {
+              "title": "Task: Bug issue template",
+              "body": "- [ ] Steps to reproduce, expected, actual\n- [ ] Severity field with blocking called out"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
